@@ -1,0 +1,46 @@
+@startuml DS02_Registro_Saida
+actor Operador
+participant "Interface: TelaSaida" as Tela
+participant "Controle: EstoqueControlador" as Ctrl
+participant "DAO/Model: Produto" as Prod
+participant "DAO/Model: RegistroSaida" as RS
+participant "Servico: NotificacaoAlerta" as Alerta
+
+Operador -> Tela: informarDadosSaida(funcionario, setorDestino)
+Operador -> Tela: informarItem(codigoBarras, quantidade)
+Operador -> Tela: clicarFinalizarSaida()
+
+Tela -> Ctrl: processarSaida(funcionario, setorDestino, codigoBarras, quantidade)
+activate Ctrl
+
+Ctrl -> Prod: buscarPorCodigoBarras(codigoBarras)
+activate Prod
+Prod --> Ctrl: objetoProduto (saldoAtual, estoqueMinimo)
+deactivate Prod
+
+alt saldoAtual >= quantidade
+    Ctrl -> Prod: atualizarEstoque(-quantidade)
+    activate Prod
+    Prod --> Ctrl: novoSaldo
+    deactivate Prod
+    
+    Ctrl -> RS: registrar(funcionario, setorDestino, produtoId, quantidade)
+    activate RS
+    RS --> Ctrl: ok
+    deactivate RS
+
+    opt novoSaldo <= estoqueMinimo
+        Ctrl -> Alerta: emitirAlertaEstoqueMinimo(produtoId, novoSaldo)
+        activate Alerta
+        Alerta --> Ctrl: alertaEnviado
+        deactivate Alerta
+    end
+
+    Ctrl --> Tela: sucessoSaida("Saída concluída!")
+else Saldo Insuficiente
+    Ctrl --> Tela: erro("Estoque insuficiente para esta operação!")
+end
+
+deactivate Ctrl
+Tela --> Operador: exibirResultado()
+@enduml

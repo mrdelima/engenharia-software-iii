@@ -1,0 +1,38 @@
+@startuml Diagrama_Casos_de_Uso_SGE
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Administrador" as Admin
+actor "Operador de Almoxarifado" as Operador
+actor "Sistema (Automático)" as Sistema
+
+rectangle "Sistema de Controle de Estoque (SGE)" {
+    usecase "UC01 - Autenticar Usuário" as UC01
+    usecase "UC02 - Cadastrar Produto" as UC02
+    usecase "UC03 - Gerenciar Categorias" as UC03
+    usecase "UC04 - Registrar Entrada de Produto" as UC04
+    usecase "UC05 - Registrar Saída de Produto" as UC05
+    usecase "UC06 - Gerenciar Fornecedores" as UC06
+    usecase "UC07 - Monitorar Estoque Mínimo" as UC07
+    usecase "UC08 - Gerenciar Usuários" as UC08
+}
+
+Admin --> UC08
+Admin --> UC06
+Admin --> UC03
+
+Operador --> UC02
+Operador --> UC04
+Operador --> UC05
+
+UC02 .> UC01 : <<include>>
+UC04 .> UC01 : <<include>>
+UC05 .> UC01 : <<include>>
+UC06 .> UC01 : <<include>>
+UC08 .> UC01 : <<include>>
+
+UC07 .> UC04 : <<extend>>
+UC07 .> UC05 : <<extend>>
+
+Sistema --> UC07
+@enduml

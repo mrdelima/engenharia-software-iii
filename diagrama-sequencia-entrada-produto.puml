@@ -1,0 +1,36 @@
+@startuml DS01_Registro_Entrada
+actor Operador
+participant "Interface: TelaEntrada" as Tela
+participant "Controle: EstoqueControlador" as Ctrl
+participant "DAO/Model: RegistroEntrada" as RE
+participant "DAO/Model: Produto" as Prod
+
+Operador -> Tela: informarDadosEntrada(numNF, idFornecedor)
+Operador -> Tela: lerCodigoBarras(codigoBarras, quantidade)
+Operador -> Tela: clicarConfirmarEntrada()
+Tela -> Ctrl: processarEntrada(numNF, idFornecedor, itens)
+
+activate Ctrl
+Ctrl -> RE: criar(numNF, idFornecedor)
+activate RE
+RE --> Ctrl: registroId
+deactivate RE
+
+loop para cada item da entrada
+    Ctrl -> Prod: buscarPorCodigoBarras(codigoBarras)
+    activate Prod
+    Prod --> Ctrl: objetoProduto
+    deactivate Prod
+    
+    Ctrl -> Prod: atualizarEstoque(+quantidade)
+    activate Prod
+    Prod --> Ctrl: estoqueAtualizado
+    deactivate Prod
+    
+    Ctrl -> RE: adicionarItem(produtoId, quantidade)
+end
+
+Ctrl --> Tela: confirmacaoSucesso()
+deactivate Ctrl
+Tela --> Operador: exibirMensagem("Entrada realizada com sucesso!")
+@enduml

@@ -1,0 +1,76 @@
+@startuml Diagrama_de_Classes_SGE
+skinparam classAttributeIconSize 0
+
+class Usuario {
+  - id: Long
+  - nome: String
+  - email: String
+  - senhaCriptografada: String
+  - perfil: String
+  + autenticar(): Boolean
+}
+
+class Categoria {
+  - id: Long
+  - nome: String
+  - descricao: String
+  + cadastrar(): void
+}
+
+class Fornecedor {
+  - id: Long
+  - razaoSocial: String
+  - cnpj: String
+  - telefone: String
+  + cadastrar(): void
+}
+
+class Produto {
+  - id: Long
+  - codigoBarras: String
+  - descricao: String
+  - unidadeMedida: String
+  - saldoEstoque: Integer
+  - estoqueMinimo: Integer
+  - precoCusto: Double
+  + atualizarEstoque(qtd: Integer): void
+  + verificarEstoqueMinimo(): Boolean
+}
+
+class RegistroEntrada {
+  - id: Long
+  - numeroNotaFiscal: String
+  - dataHora: DateTime
+  + registrarEntrada(): void
+}
+
+class ItemEntrada {
+  - quantidade: Integer
+  - precoUnitario: Double
+}
+
+class RegistroSaida {
+  - id: Long
+  - funcionarioRetirada: String
+  - setorDestino: String
+  - dataHora: DateTime
+  + registrarSaida(): void
+}
+
+class ItemSaida {
+  - quantidade: Integer
+}
+
+' Relacionamentos
+Categoria "1" -- "0..*" Produto : categoriza >
+Fornecedor "1" -- "0..*" RegistroEntrada : fornece >
+Usuario "1" -- "0..*" RegistroEntrada : registra >
+Usuario "1" -- "0..*" RegistroSaida : autoriza >
+
+RegistroEntrada "1" *-- "1..*" ItemEntrada
+ItemEntrada "0..*" -- "1" Produto
+
+RegistroSaida "1" *-- "1..*" ItemSaida
+ItemSaida "0..*" -- "1" Produto
+
+@enduml

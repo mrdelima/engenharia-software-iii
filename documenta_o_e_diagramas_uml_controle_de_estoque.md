@@ -47,6 +47,7 @@ O **Sistema de Controle de Estoque (SGE)** tem como objetivo gerenciar de forma 
 ## 2. Diagrama de Casos de Uso
 
 O diagrama de casos de uso representa as principais interações operacionais dos atores com o sistema SGE.
+![alt text](img_caso_uso.png)
 
 ```
 @startuml Diagrama_Casos_de_Uso_SGE
@@ -185,6 +186,7 @@ Sistema --> UC07
 ## 4. Diagrama de Classes
 
 O diagrama abaixo apresenta as principais classes de domínio do sistema, seus atributos, visibilidade, métodos, cardinalidades e relacionamentos.
+![alt text](img_classe_uml.png)
 
 ```
 @startuml Diagrama_de_Classes_SGE
@@ -271,6 +273,7 @@ ItemSaida "0..*" -- "1" Produto
 ### DS01: Diagrama de Sequência – Registro de Entrada de Produto
 
 O diagrama a seguir descreve a movimentação de entrada de produtos associada a um fornecedor e Nota Fiscal.
+![alt text](img_sequencia_entrada.png)
 
 ```
 @startuml DS01_Registro_Entrada
@@ -315,6 +318,7 @@ Tela --> Operador: exibirMensagem("Entrada realizada com sucesso!")
 ### DS02: Diagrama de Sequência – Registro de Saída com Verificação de Estoque Mínimo
 
 O diagrama detalha a baixa de um produto no estoque, com verificação de disponibilidade e notificação de estoque mínimo.
+![alt text](img_sequencia_saida.png)
 
 ```
 @startuml DS02_Registro_Saida
